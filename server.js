@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
 const webrtc = require('wrtc');
+const fs = require('fs')
+const https = require('https')
 let senderStream;
 
 app.use(express.static("public"));
@@ -51,5 +53,8 @@ app.post('/consumer', async({body},res) =>{
 function handleTrackEvent(e,peer){
     senderStream = e.streams[0];
 }
-
-app.listen(3000, () => console.log("Server started on port 3000"));
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+},app).listen(3000, () => console.log("Server started on port 3000"));
+//app.listen(3000, () => console.log("Server started on port 3000"));

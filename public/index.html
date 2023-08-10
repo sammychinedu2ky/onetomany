@@ -4,13 +4,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #my-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #my-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
     <title>Screen Streaming</title>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="index.js"></script>
 </head>
 <body>
-    <button id="my-button">Start Stream</button>
+    <div>
+        <h1 style="text-align: center;">Screen Streaming Using WebRTC And A System On Chip</h1>
+        <h2 style="text-align: center;">Start Stream</h2>
+        <center>
+          <button id="my-button">Start Stream</button>
+        </center>
+    </div>
     <!-- <video autoplay id="video"></video> -->
 </body>
 </html>
