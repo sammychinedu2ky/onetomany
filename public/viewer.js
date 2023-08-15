@@ -1,5 +1,9 @@
 window.onload=()=>{
     document.getElementById('my-button').onclick =()=>{
+        // disable button
+        document.getElementById('my-button').disabled = true;
+        // change value to clicked
+        document.getElementById('my-button').innerText = 'clicked';
       init();
     }
 }
