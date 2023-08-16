@@ -1,10 +1,13 @@
-window.onload =() => {
-    document.getElementById('my-button').onclick = () => {
+window.onload = () => {
+    document.getElementById('my-button').onclick = async() => {
+        
+        document.getElementById('my-button').innerText = 'Clicked';
         // disable button 
         document.getElementById('my-button').disabled = true;
         // change value to clicked
-        document.getElementById('my-button').innerText = 'Clicked';
-        init();
+        await init();
+        // unhide the viewer id
+        document.getElementById('viewer').style.display = 'block'; 
     }
 }
 

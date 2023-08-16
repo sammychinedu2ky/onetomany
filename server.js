@@ -5,6 +5,18 @@ const webrtc = require('wrtc');
 const fs = require('fs')
 const https = require('https')
 const http = require('http')
+var os = require( 'os' );
+const QRCode = require('qrcode');
+var networkInterfaces = os.networkInterfaces();
+var arr = networkInterfaces['Wi-Fi'][1]
+var viewer = `https://${arr.address}:3000/viewer.html`
+var broadcaster = `https://localhost:3000`
+console.log(`Viewer: ${viewer}`)
+console.log(`Broadcaster: ${broadcaster}`)
+QRCode.toFile('public/viewer.png', viewer, function (err) {
+    if (err) throw err
+})
+
 let senderStream;
 
 app.use(express.static("public"));
@@ -12,6 +24,8 @@ app. use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/broadcast', async({body},res) =>{
+    senderStream = null;
+    console.log('broadcast')
     const peer = new webrtc.RTCPeerConnection({
         iceServers: [
             {
@@ -24,16 +38,16 @@ app.post('/broadcast', async({body},res) =>{
     await peer.setRemoteDescription(desc);
     const answer = await peer.createAnswer();
     await peer.setLocalDescription(answer);
-    console.log("hi")
     const payload = {
         sdp: peer.localDescription
     };
-
     res.json(payload);
  
 });
 
 app.post('/consumer', async({body},res) =>{
+    if(!senderStream) return res.json({});
+    console.log('consume')
     const peer = new webrtc.RTCPeerConnection({
         iceServers: [
             {
@@ -58,13 +72,5 @@ function handleTrackEvent(e,peer){
 https.createServer({
     key: fs.readFileSync('server.key'),
     cert: fs.readFileSync('server.cert')
-},app).listen(80, () => console.log("Server started on port 3000"));
+},app).listen(3000, () => console.log("Server started"));
 
-
-app.get("*", function(req, res, next) {
-    res.redirect("https://" + req.headers.host + req.path);
-});
-
-http.createServer(app).listen(3000, function() {
-    console.log("Express TTP server listening on port 3000");
-});

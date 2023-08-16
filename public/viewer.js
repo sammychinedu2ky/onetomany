@@ -34,12 +34,27 @@ async function handleNegotiationNeededEvent(peer){
         sdp: peer.localDescription
     };
     const {data} = await axios.post('/consumer', payload);
+    console.log(data)
+    if(Object.keys(data).length === 0) {
+        console.log('no tracks')
+        return;
+    }
     const desc = new RTCSessionDescription(data.sdp);
     peer.setRemoteDescription(desc).catch(e => console.log(e));
 }
 
 function handleTrackEvent(e){
     const stream = new MediaStream([e.track]);
-    const video = document.getElementById('video');
-    video.srcObject = stream;
+    // check if there is a stream in e
+    if (e.streams.length > 0){
+        console.log('got stream');
+        console.log(stream);
+        // add stream to video
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+    }
+    else {
+        console.log('no stream');
+    }
+    
 }
